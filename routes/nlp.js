@@ -11,10 +11,8 @@ const fs = require ('fs');
 router.get('/', function(req, res) {
   // obtiene un texto aleatorio de discursos presidenciales
   //var txt = corpus.sotu.random();
-  var txt = corpus.flowers.random();
-  //var txt = fs.readFileSync (_dirname+'/nombre del archivo.txt, 'utf8'' )
-
-
+  //var txt = corpus.flowers.random();
+  var txt = fs.readFileSync (__dirname+'/intelligenceofflowers.txt', 'utf8' )
 
 
 
@@ -29,10 +27,14 @@ router.get('/', function(req, res) {
 
   // extrae los sustantivos
   var nouns = r.nouns();
+  nouns.unique();
 
+//var adjectives = r.adjectives ();
   // hace el render de la vista entregando el texto, la lista de personas
   // y sustantivos
-  res.render('nlp', {
+  console.log (nouns.out ('array'));
+
+    res.render('nlp', {
     txt: txt,
     people: {
       list: people.out ('array'),
@@ -42,6 +44,10 @@ router.get('/', function(req, res) {
       list: nouns.out ('array'),
       length: nouns.list.length
     }
+    //adjectives: {
+      //list: adjectives.out ('array'),
+      //length: adjectives.list.length
+    //}
     });
 });
 

@@ -1,13 +1,70 @@
-<h1>NLP</h1>
+<h1>Natural Language Processing</h1>
+<div id="viz"></div>
 
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script type ="text/javascript">
+(function (){
+function map (input, re1,re2,rs1,rs2){
+  return ((input-re1)/(re2-re1)) * (rs2 - rs1) +
+re1
+}
+  function viz (data){
+  var svg = d3.select ('#viz')
+  .append ('svg')
+  .attr ('width', 1000)
+  .attr ('height', 1500)
+
+var group  = svg.selectAll ('g')
+.data(data)
+
+var elemEnter = group.enter ()
+  .append ('g')
+  .attr ('transform', function (d,i){
+    var x = map(d.count, 0,1000, 0,1500)
+    var y = x
+    return 'translate ('+ x +', '+ y +')'
+  })
+//transform: translate ( 100, 100)
+var circulo = elemEnter.append ('circle')
+//.attr (dy -5 )
+.attr('fill', function (d){
+  if(d.name ==='sustantivos'){
+    return 'yellow'
+  }
+  if (d.name ==='personas'){
+    return 'black'
+  }
+})
+.attr ('r', function(d, i){
+return map (d.count, 0,1000, 0,1500)
+
+})
+}
+
+var data = [{
+
+  count: {{nouns.length}} ,
+  name: 'sustantivos'
+  },
+  {
+    count: {{people.length}},
+    name: 'personas'
+  }
+]
+viz (data);
+
+}) ();
+
+
+</script>
 <!-- presenta la lista de sustantivos -->
 <h1>Sustantivos [{{nouns.length}}]</h1>
 <ul>
   {{#each nouns.list}}
   <li>
-    {{#each this.terms}}
-      {{this.text}}
-    {{/each}}
+
+      {{this}}
+
   </li>
   {{/each}}
 </ul>
@@ -17,10 +74,8 @@
 <ul>
   {{#each people.list}}
   <li>
-    {{#each this.terms}}
-      {{this.text}}
-    {{/each}}
-  </li>
+  {{this}}
+</li>
   {{/each}}
 </ul>
 
